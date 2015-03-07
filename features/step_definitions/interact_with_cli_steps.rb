@@ -1,17 +1,27 @@
-require 'open3'
+require 'pty'
+require 'expect'
 
 Given(/^I create a project from template "(.*?)"$/) do |arg1|
   template_file = "#{File.expand_path("../../..", __FILE__)}/#{arg1}_template.rb"
-  fail "No template file with name #{template_file}" unless File.exist? template_file
-  $in, $out, $err, _ = Open3.popen3("rails new dummy --skip --skip-bundle --template #{template_file}", :chdir => $dir_path)
+  "No template file with name #{template_file}" unless File.exist? template_file
+  $r, $w, _ = PTY.spawn("rails new dummy --skip --skip-bundle --template #{template_file}", :chdir => $dir_path)
 end
 
 When(/^I'm asked "(.*?)"$/) do |arg1|
-  log = $out.read.chomp
-  p log
-  expect(log).to match((/#{arg1}/m))
+  res = $r.expect(/#{arg1}/, 5)
+  fail "Can't find the output '#{arg1}'" unless res
 end
 
 When(/^I answer "(.*?)"$/) do |arg1|
-  $in.puts 'yes'
+  $w.puts arg1
+end
+
+Then(/^I should have new project$/) do
+  res = $r.expect(/Success!/, 5)
+  fail 'Script failed to finish' unless res
+end
+
+Then(/^I should not have new project$/) do
+  res = $r.expect(/Success!/, 5)
+  expect(res).to eq nil
 end

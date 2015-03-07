@@ -1,7 +1,7 @@
 begin require 'rspec/expectations'; rescue LoadError; require 'spec/expectations'; end
 
 $dir_path = nil
-$in, $out, $err = []
+$r, $w = []
 
 Before do |scenario|
   $dir_path = "#{File.expand_path("../../", __FILE__)}/dummy"
@@ -9,9 +9,14 @@ Before do |scenario|
   Dir.mkdir $dir_path
 end
 
+After do |scenario|
+  $r.close
+  $w.close
+  FileUtils.rm_rf $dir_path
+end
+
 at_exit do
-  $in.close
-  $out.close
-  $err.close
+  $r.close
+  $w.close
   FileUtils.rm_rf $dir_path
 end
