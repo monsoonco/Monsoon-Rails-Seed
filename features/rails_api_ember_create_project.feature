@@ -4,12 +4,15 @@ Feature: Create Rails project from 'Rail API Ember' template
 
 Scenario: Create project
   Given I create a project from template "rails_api_ember"
-  When I'm asked "Do you really wanna install this yes/no?"
+  When I'm asked "Do you want to use \"Lightning Fast Deployments With Rails\""
   And I answer "yes"
   Then I should have new project
+  And I should have landing controller created
+  And I should have correct Gemfile
 
 Scenario: Fail to create new project
   Given I create a project from template "rails_api_ember"
-  When I'm asked "Do you really wanna install this yes/no?"
+  When I'm asked "Do you want to use \"Lightning Fast Deployments With Rails\""  
   And I answer "no"
-  Then I should not have new project
+  Then I should have new project  
+  And I should not have landing controller created    

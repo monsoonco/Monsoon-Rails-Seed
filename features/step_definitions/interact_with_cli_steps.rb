@@ -17,11 +17,22 @@ When(/^I answer "(.*?)"$/) do |arg1|
 end
 
 Then(/^I should have new project$/) do
-  res = $r.expect(/Success!/, 5)
+  res = $r.expect(/Project successfully scaffolded/, 5)
   fail 'Script failed to finish' unless res
 end
 
-Then(/^I should not have new project$/) do
-  res = $r.expect(/Success!/, 5)
-  expect(res).to eq nil
+Then(/^I should have landing controller created$/) do
+  subpath = "app/controllers/landing_controller.rb"
+  path = "#{File.expand_path("../../..", __FILE__)}/dummy/#{subpath}"
+  expect(File.read("#{$dir_path}/dummy/#{subpath}")).to eq File.read(path)
+end
+
+Then(/^I should have correct Gemfile$/) do
+  path = "#{File.expand_path("../../..", __FILE__)}/dummy/Gemfile"
+  expect(File.read("#{$dir_path}/dummy/Gemfile")).to eq File.read(path)
+end
+
+Then(/^I should not have landing controller created$/) do
+  subpath = "app/controllers/landing_controller.rb"
+  fail 'LandingController exists!' if File.exist?("#{$dir_path}/dummy/#{subpath}")
 end
