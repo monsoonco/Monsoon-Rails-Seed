@@ -89,5 +89,10 @@ gem_group :test do
   gem 'fakeredis', require: 'fakeredis/rspec'
 end
 
+# ----- Git  ---------------------------------------------------------------
+git :init
+git add:    "."
+git commit: "-m 'Initial commit: Clean application'"
+
 # ----- Success  -----------------------------------------------------------
 puts 'Project successfully scaffolded'

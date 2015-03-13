@@ -34,5 +34,28 @@ end
 
 Then(/^I should not have landing controller created$/) do
   subpath = "app/controllers/landing_controller.rb"
-  fail 'LandingController exists!' if File.exist?("#{$dir_path}/dummy/#{subpath}")
+  fail 'LandingController exists' if File.exist?("#{$dir_path}/dummy/#{subpath}")
+end
+
+Then(/^I should have redis initializer created$/) do
+  subpath = "config/initializers/redis.rb"
+  path = "#{File.expand_path("../../..", __FILE__)}/dummy/#{subpath}"
+  expect(File.read("#{$dir_path}/dummy/#{subpath}")).to eq File.read(path)
+end
+
+Then(/^I should not have redis initializer created$/) do
+  subpath = "app/controllers/landing_controller.rb"
+  fail 'redis.rb exists' if File.exist?("#{$dir_path}/dummy/#{subpath}")
+end
+
+Then(/^git repo should be initialized$/) do
+  path = "#{$dir_path}/dummy/.git"
+  fail 'No git repo found' unless File.exist?(path)
+end
+
+Then(/^git repo should have initial commit$/) do
+  Dir.chdir("#{$dir_path}/dummy") do
+    res = `git log`
+    expect(res).to match(/Initial commit: Clean application/)
+  end
 end
