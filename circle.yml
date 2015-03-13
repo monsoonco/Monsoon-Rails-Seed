@@ -1,3 +1,6 @@
 test:
-  post:
+  pre:
+    - git config --global user.email "ci@example.com"
+    - git config --global user.name "Circle CI"
+  override:
     - bundle exec cucumber

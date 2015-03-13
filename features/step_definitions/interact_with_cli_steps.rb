@@ -18,6 +18,8 @@ end
 
 Then(/^I should have new project$/) do
   res = $r.expect(/Project successfully scaffolded/, 5)
+  # for debug
+  # p res
   fail 'Script failed to finish' unless res
 end
 
@@ -55,6 +57,7 @@ end
 
 Then(/^git repo should have initial commit$/) do
   Dir.chdir("#{$dir_path}/dummy") do
+    `git checkout master`
     res = `git log`
     expect(res).to match(/Initial commit: Clean application/)
   end
