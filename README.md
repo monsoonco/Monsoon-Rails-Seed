@@ -8,3 +8,4 @@ Scripts are tested with cucumber. Here is an example of running cucumber scenari
 ```bash
 cucumber features/rails_api_ember_template.feature
 ```
+In tests assertions are made against [dummy](https://github.com/monsoonco/monsoon-rails-templates/tree/master/dummy) directory, which contains files that are added by the script (preserving rails directory layout). You can quickly look at what should you expect from running a script there.
