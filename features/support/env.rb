@@ -14,9 +14,3 @@ After do |scenario|
   $w.close
   FileUtils.rm_rf $dir_path
 end
-
-at_exit do
-  $r.close
-  $w.close
-  FileUtils.rm_rf $dir_path
-end
