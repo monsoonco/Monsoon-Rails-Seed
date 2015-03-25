@@ -34,3 +34,6 @@ gem "active_model_serializers"
 group :test do
   gem "fakeredis", require: "fakeredis/rspec"
 end
+
+gem "devise"
+gem "simple_token_authentication"

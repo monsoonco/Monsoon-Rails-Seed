@@ -89,7 +89,54 @@ gem_group :test do
   gem 'fakeredis', require: 'fakeredis/rspec'
 end
 
-# ----- Git  ---------------------------------------------------------------
+# ----- Database  --------------------------------------------------------------
+run 'rm -f config/database.yml'
+database_yml = <<-CODE
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: <%= ENV['DATABASE_ROLE'] %>
+  password:
+
+development:
+  <<: *default
+  database: #{@app_name}_development
+
+test:
+  <<: *default
+  database: #{@app_name}_test
+  CODE
+file 'config/database.yml', database_yml
+# ----- Authentication  --------------------------------------------------------
+puts
+say_status "Rubygems", "Adding authentication libraries into Gemfile...\n", :yellow
+puts        '-'*80, ''; sleep 0.75
+gem 'devise'
+gem 'simple_token_authentication'
+user_model_code =  <<-CODE
+class User < ActiveRecord::Base
+  acts_as_token_authenticatable
+end
+  CODE
+file 'app/models/user.rb', user_model_code
+inject_into_file 'app/controllers/application_controller.rb', before: %r{end}i do
+  <<-CODE
+  acts_as_token_authentication_handler_for User, fallback_to_devise: false
+  CODE
+end
+
+# ----- Run bundle install, generators, migrations -----------------------------
+Bundler.with_clean_env do
+  run 'bundle install'
+  generate 'migration create_users'
+  generate 'devise:install'
+  generate 'devise User'
+  generate 'migration add_authentication_token_to_users authentication_token:string:index'
+  rake 'db:create'
+  rake 'db:migrate'
+end
+# ----- Git  -------------------------------------------------------------------
 git :init
 git add:    "."
 git commit: "-m 'Initial commit: Clean application'"

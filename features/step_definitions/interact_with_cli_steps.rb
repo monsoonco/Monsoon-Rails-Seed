@@ -26,12 +26,12 @@ end
 Then(/^I should have landing controller created$/) do
   subpath = "app/controllers/landing_controller.rb"
   path = "#{File.expand_path("../../..", __FILE__)}/dummy/#{subpath}"
-  expect(File.read("#{$dir_path}/dummy/#{subpath}")).to eq File.read(path)
+  expect(File.read(path)).to eq File.read("#{$dir_path}/dummy/#{subpath}")
 end
 
 Then(/^I should have correct Gemfile$/) do
   path = "#{File.expand_path("../../..", __FILE__)}/dummy/Gemfile"
-  expect(File.read("#{$dir_path}/dummy/Gemfile")).to eq File.read(path)
+  expect(File.read(path).strip).to eq File.read("#{$dir_path}/dummy/Gemfile")
 end
 
 Then(/^I should not have landing controller created$/) do
@@ -42,7 +42,7 @@ end
 Then(/^I should have redis initializer created$/) do
   subpath = "config/initializers/redis.rb"
   path = "#{File.expand_path("../../..", __FILE__)}/dummy/#{subpath}"
-  expect(File.read("#{$dir_path}/dummy/#{subpath}")).to eq File.read(path)
+  expect(File.read(path)).to eq File.read("#{$dir_path}/dummy/#{subpath}")
 end
 
 Then(/^I should not have redis initializer created$/) do
